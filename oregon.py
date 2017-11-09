@@ -1,6 +1,25 @@
 import random
 
+class Game():
+    """Creates a game object to store global game variables """
+    def __init__(self):
+        self.mileage = 0 # M
+        self.south_pass = False # F1
+        self.blue_mountains = False # F2
+        self.south_pass_mileage = False # M9
+        self.cash = 700 # T
 
+class Player():
+    """ Creates a player for reference during the game. """
+    def __init__(self):
+        """ Initializes the specific variables for the player """
+        self.injury = False # K8
+        self.illness = False #S4
+        self.shotskill = 0 # D9
+        self.cash = 700 # T
+
+    def __str__(self):
+        return "Player Status:: injury: {0}, illness: {1}, shot skill: {2}".format(self.injury, self.illness, self.shotskill)
 
 
 def print_instructions():
@@ -48,6 +67,7 @@ def print_instructions():
     print(instructions)
 
 def shotskill():
+    """ Allows the user to choose their rifle skill level. Used for shooting"""
     skill_instructions="""
     How good a shot are you with your rifle?
     1. Ace Marksman
@@ -65,12 +85,36 @@ def shotskill():
         skill = 0
     return skill
 
+def get_animals():
+    animals = int(input("How much do you want to spend on oxen: ")) # A
+    return animals
+
+def initial_supplies(game):
+    """ Guides user through buying initial supplies """
+    budget = game.cash
+    spent = 0
+    animals = 0
+    while animals < 200 OR animals >= 300:
+        print("You must spend between 200 and 300 on oxen.")
+        animals = get_animals()
+
+
 def main():
     needinstructions = input("Do you need instructions? (Yes / No) ")
     if needinstructions[:1].lower() == "y":
         print_instructions()
 
-    shot = shotskill()
-    print(shot)
+    game = Game()
+    player = Player()
+    player.shotskill = shotskill()
+    initial_supplies(game)
+
+    print(player)
+
+    fort_option = -1 # X1
+    turn = 0 # D3
+
+
+
 
 main()
