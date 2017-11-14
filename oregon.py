@@ -8,6 +8,17 @@ class Game():
         self.blue_mountains = False # F2
         self.south_pass_mileage = False # M9
         self.cash = 700 # T
+        self.animals = 0 # A
+        self.food = 0 # F
+        self.bullets = 0 # B
+
+    def __str__(self):
+        return """Game Status:: mileage: {0}, south_pass: {1}, blue_mountains:
+                {2}, south_pass_mileage: {3}, cash: {4}, animals: {5},
+                food: {6}, bullets: {7}""".format(self.mileage, self.south_pass,
+                self.blue_mountains, self.south_pass_mileage, self.cash,
+                self.animals, self.food, self.bullets)
+
 
 class Player():
     """ Creates a player for reference during the game. """
@@ -16,7 +27,6 @@ class Player():
         self.injury = False # K8
         self.illness = False #S4
         self.shotskill = 0 # D9
-        self.cash = 700 # T
 
     def __str__(self):
         return "Player Status:: injury: {0}, illness: {1}, shot skill: {2}".format(self.injury, self.illness, self.shotskill)
@@ -85,18 +95,36 @@ def shotskill():
         skill = 0
     return skill
 
-def get_animals():
-    animals = int(input("How much do you want to spend on oxen: ")) # A
-    return animals
-
 def initial_supplies(game):
     """ Guides user through buying initial supplies """
     budget = game.cash
     spent = 0
     animals = 0
-    while animals < 200 OR animals >= 300:
+    while (animals < 200 or animals >= 300):
         print("You must spend between 200 and 300 on oxen.")
-        animals = get_animals()
+        animals = int(input("How much do you want to spend on oxen: ")) # A
+    game.animals = animals
+    budget = budget - animals
+
+    food = 0
+    print("You have ", budget, " remaining to spend on supplies.")
+    while (food <= 0 or food > budget):
+        food = int(input("How much would you like to spend on food: ")) # F
+    game.food = food
+    budget = budget - food
+    print("You have ", budget, " remaining to spend on supplies.")
+
+    bullets = int(input("How much would you like to spend on ammunition: ")) #B
+    while (bullets < 0 or bullets > budget):
+        print("That is impossible.")
+        bullets = int(input("How much would you like to spend on ammunition: "))
+    game.bullets = bullets
+    budget = budget - bullets
+    print("You have ", budget, " remaining to spend on supplies.")
+
+    
+
+
 
 
 def main():
@@ -110,6 +138,7 @@ def main():
     initial_supplies(game)
 
     print(player)
+    print(game)
 
     fort_option = -1 # X1
     turn = 0 # D3
