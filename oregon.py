@@ -4,6 +4,7 @@ class Game():
     """Creates a game object to store global game variables """
     def __init__(self):
         self.mileage = 0 # M
+        self.mileage2 = 0 # M2
         self.south_pass = False # F1
         self.blue_mountains = False # F2
         self.south_pass_mileage = False # M9
@@ -11,13 +12,17 @@ class Game():
         self.animals = 0 # A
         self.food = 0 # F
         self.bullets = 0 # B
+        self.clothing = 0 # C
+        self.misc = 0 # M1
+
 
     def __str__(self):
         return """Game Status:: mileage: {0}, south_pass: {1}, blue_mountains:
                 {2}, south_pass_mileage: {3}, cash: {4}, animals: {5},
-                food: {6}, bullets: {7}""".format(self.mileage, self.south_pass,
-                self.blue_mountains, self.south_pass_mileage, self.cash,
-                self.animals, self.food, self.bullets)
+                food: {6}, bullets: {7}, clothing: {8}, misc: {9}""".format(
+                self.mileage,self.south_pass, self.blue_mountains,
+                self.south_pass_mileage,self.cash, self.animals, self.food,
+                self.bullets, self.clothing, self.misc)
 
 
 class Player():
@@ -28,8 +33,10 @@ class Player():
         self.illness = False #S4
         self.shotskill = 0 # D9
 
+
     def __str__(self):
-        return "Player Status:: injury: {0}, illness: {1}, shot skill: {2}".format(self.injury, self.illness, self.shotskill)
+        return """Player Status:: injury: {0}, illness: {1},
+        shot skill: {2}""".format(self.injury, self.illness, self.shotskill)
 
 
 def print_instructions():
@@ -76,6 +83,7 @@ def print_instructions():
 
     print(instructions)
 
+
 def shotskill():
     """ Allows the user to choose their rifle skill level. Used for shooting"""
     skill_instructions="""
@@ -94,6 +102,7 @@ def shotskill():
     if skill > 5:
         skill = 0
     return skill
+
 
 def initial_supplies(game):
     """ Guides user through buying initial supplies """
@@ -118,14 +127,76 @@ def initial_supplies(game):
     while (bullets < 0 or bullets > budget):
         print("That is impossible.")
         bullets = int(input("How much would you like to spend on ammunition: "))
-    game.bullets = bullets
     budget = budget - bullets
+    game.bullets = bullets * 50
     print("You have ", budget, " remaining to spend on supplies.")
 
-    
+    clothing = int(input("How much would you like to spend on clothing: ")) # C
+    while (clothing < 0 or clothing > budget):
+        print("That is impossible.")
+        clothing = int(input("How much would you like to spend on clothing: "))
+    game.clothing = clothing
+    budget = budget - clothing
+    print("You have ", budget, " remaining to spend on supplies.")
+
+    misc = int(input("How much would like to spend on misc. supplies: ")) #M1
+    while (misc < 0 or misc > budget):
+        print("That is impossible.")
+        misc = int(input("How much would like to spend on misc. supplies: "))
+    game.misc = misc
+    game.cash = budget - misc
+    print("After all your purchases, you now have ",game.cash," dollars left.")
+
+
+def print_date(turn):
+    """ Prints the date that corresponds to the turn """
+    dates=[0,"April 12", "April 26", "May 10", "May 24", "June 7", "June 21",
+           "July 5", "July 19", "August 2", "August 16", "August 31",
+           "September 13", "September 27", "October 11", "October 25",
+           "November 8", "November 22", "December 6", "December 20"]
+    print("Monday, ", dates[turn], ", 1847")
+
+def visit_doctor(game, player):
+    """ Handles the visit to the doctor when player is injured or sick."""
+    print("PLACEHOLDER: $20 or you die!")
+
+
+def run_turn(game, player):
+    if game.food < 0:
+        game.food = 0
+    else:
+        game.food = int(game.food)
+
+    if game.bullets < 0:
+        game.bullets = 0
+    else:
+        game.bullets = int(game.bullets)
+
+    if game.clothing < 0:
+        game.clothing = 0
+    else:
+        game.clothing = int(game.clothing)
+
+    if game.misc < 0:
+        game.misc = 0
+    else:
+        game.misc = int(game.misc)
+
+    if game.food < 13:
+        print("You'd better do some hunting or buy food and soon!")
+
+    game.mileage2 = game.mileage
+
+    if (game.illness == 1 or game.injury == 1):
+        visit_doctor(game, player)
 
 
 
+
+
+def death():
+    """This does nothing at the moment but will handle the death sequence"""
+    print("PLACEHOLDER: You are dead.")
 
 def main():
     needinstructions = input("Do you need instructions? (Yes / No) ")
@@ -134,6 +205,7 @@ def main():
 
     game = Game()
     player = Player()
+    turn = 0 # D3
     player.shotskill = shotskill()
     initial_supplies(game)
 
@@ -141,7 +213,19 @@ def main():
     print(game)
 
     fort_option = -1 # X1
-    turn = 0 # D3
+
+    turn =+ 1
+    if turn <=19:
+        print_date(turn)
+    else:
+        print("""You have been on the trail too long. Your family dies in the
+                 the first blizzard of winter""")
+        death()
+
+    run_turn(game, player)
+
+
+
 
 
 
