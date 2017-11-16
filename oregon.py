@@ -158,8 +158,28 @@ def print_date(turn):
 
 def visit_doctor(game, player):
     """ Handles the visit to the doctor when player is injured or sick."""
-    print("PLACEHOLDER: $20 or you die!")
+    game.cash =- 20
+    if game.cash >= 0:
+        print("Doctor's bill is $20.")
+    else:
+        game.cash = 0
+        print("You can't afford a doctor.")
+        process_death(player)
 
+
+def process_death(player):
+    """Determines how player dies"""
+    diseases = ["dysentery", "pneumonia", "black fever", "small pox", "cholera",
+    "the shakes", "yellow fever", "dysentery", "dysentery", "dysentery"]
+
+    if player.injury = 1:
+        print("You died of injuries!")
+    else:
+        rdm = random.Random()
+        disease_idx = rdm.randint(1,10) - 1
+        disease_death = "You have died of {0}.".format(diseases[disease_idx])
+        print(disease_death)
+    death()
 
 def run_turn(game, player):
     if game.food < 0:
